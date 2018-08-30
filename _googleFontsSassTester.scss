@@ -1,0 +1,67 @@
+@function spaceToPlus($string, $search: ' ', $replace: '+') {
+  $index: str-index($string, $search);
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + spaceToPlus(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+  @return $string;
+}
+
+@function fontLink($font1, $font2) {
+  @return 'https://fonts.googleapis.com/css?family=' + spaceToPlus($font1) + '|' + spaceToPlus($font2);
+}
+
+$gft_h_font: '';
+$gft_b_font: '';
+$gft_h_fonts:
+               ('Alegreya Sans',
+                'Cardo',
+                'Baloo Bhai',
+                'Gamja Flower',
+                'Bree Serif',
+                'BioRhyme',
+                'Arima Madurai',
+                'Londrina Solid',
+                'Life Savers',
+                'Flamenco',
+                'Elsie',
+                'Changa One',
+                'Cherry Swash',
+                'Elsie Swash Caps',
+                'Paytone One',
+                'Sofia'
+               );
+$gft_b_fonts: ( 'Open Sans',
+                'Josefin Sans',
+                'Cabin',
+                'Open Sans',
+                'Roboto',
+                'Montserrat'
+              );
+
+@if ($gft_h_font == '') {
+  $gft_h_font: nth($gft_h_fonts, random(length($gft_h_fonts)));
+}
+
+@if ($gft_b_font == '') {
+  $gft_b_font: nth($gft_b_fonts, random(length($gft_b_fonts)));
+}
+
+@import url('#{fontLink($gft_h_font, $gft_b_font)}');
+$header-font-family:  '#{$gft_h_font}', sans-serif;
+$body-font-family: '#{$gft_b_font}', sans-serif;
+
+body::before {
+    position: fixed;
+    z-index: 5000;
+    top:10px;
+    left: 10px;
+    display: inline-block;
+    margin: 0 auto;
+    padding: .5rem;
+    content:'Font pair: #{$gft_h_font} and #{$gft_b_font}';
+    font-size: 1rem;
+    font-family: sans-serif;
+    color: white;
+    background-color: gray;
+}
+
